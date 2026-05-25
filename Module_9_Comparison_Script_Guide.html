@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Module 9: Asynchronous Workflows - Comparison Script Guide</title>
+<style>
+:root {
+    --bg-primary: #0A1624;
+    --bg-card: #162035;
+    --bg-card-light: #1E3A52;
+    --accent1: #00A8B4;
+    --accent2: #00D68F;
+    --accent3: #FF9900;
+    --text-primary: #FFFFFF;
+    --text-secondary: #B3C5D7;
+    --text-muted: #6A8094;
+    --border: #1A3048;
+    --code-bg: #0D1E2E;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+    font-family: 'Segoe UI', Calibri, Arial, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    line-height: 1.7;
+    padding: 40px 20px;
+}
+.container { max-width: 940px; margin: 0 auto; }
+h1 { color: var(--text-primary); font-size: 1.9em; margin-bottom: 8px; border-left: 4px solid var(--accent1); padding-left: 16px; }
+h2 { color: var(--text-primary); font-size: 1.35em; margin-top: 44px; margin-bottom: 14px; padding-bottom: 8px; border-bottom: 2px solid var(--accent1); }
+h3 { color: var(--accent1); font-size: 1.05em; margin-top: 24px; margin-bottom: 10px; }
+p { margin-bottom: 12px; }
+blockquote { background: var(--bg-card); border-left: 4px solid var(--accent3); padding: 14px 18px; margin: 16px 0; border-radius: 4px; }
+blockquote strong { color: var(--accent3); }
+table { width: 100%; border-collapse: collapse; margin: 16px 0; background: var(--bg-card); border-radius: 6px; overflow: hidden; }
+th { background: var(--bg-card-light); color: var(--accent1); text-align: left; padding: 10px 14px; font-size: 0.9em; font-weight: 600; }
+td { padding: 10px 14px; border-top: 1px solid var(--border); font-size: 0.9em; }
+code { background: var(--bg-card-light); color: var(--accent2); padding: 2px 6px; border-radius: 3px; font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace; font-size: 0.88em; }
+pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 6px; padding: 16px; overflow-x: auto; margin: 14px 0; max-height: 500px; overflow-y: auto; }
+pre code { background: none; padding: 0; color: var(--text-secondary); font-size: 0.82em; line-height: 1.5; }
+ol, ul { margin: 10px 0 10px 24px; }
+li { margin-bottom: 8px; }
+strong { color: var(--text-primary); }
+a { color: var(--accent1); text-decoration: none; }
+a:hover { text-decoration: underline; }
+hr { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+.step-box { background: var(--bg-card); border-radius: 8px; padding: 20px 24px; margin: 16px 0; border-left: 4px solid var(--accent1); }
+.step-box h3 { margin-top: 0; color: var(--accent1); }
+.step-num { display: inline-block; background: var(--accent1); color: var(--bg-primary); width: 28px; height: 28px; border-radius: 50%; text-align: center; line-height: 28px; font-weight: bold; font-size: 0.9em; margin-right: 8px; }
+.tip { background: var(--bg-card); border-left: 4px solid var(--accent2); padding: 14px 18px; margin: 16px 0; border-radius: 4px; }
+.tip strong { color: var(--accent2); }
+.warning { background: var(--bg-card); border-left: 4px solid var(--accent3); padding: 14px 18px; margin: 16px 0; border-radius: 4px; }
+.warning strong { color: var(--accent3); }
+.output-example { background: #050D14; border: 1px solid var(--border); border-radius: 6px; padding: 16px; margin: 14px 0; font-family: 'Cascadia Code', Consolas, monospace; font-size: 0.8em; color: var(--text-muted); line-height: 1.6; white-space: pre; overflow-x: auto; }
+.output-example .highlight { color: var(--accent2); }
+.output-example .header { color: var(--accent1); font-weight: bold; }
+.output-example .metric { color: var(--text-secondary); }
+.copy-btn { background: var(--accent1); color: var(--bg-primary); border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 0.8em; font-weight: 600; float: right; margin-top: -4px; }
+.copy-btn:hover { background: var(--accent2); }
+.comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0; }
+.comparison-card { background: var(--bg-card); border-radius: 8px; padding: 16px; }
+.comparison-card h4 { color: var(--text-primary); margin-bottom: 8px; font-size: 0.95em; }
+.comparison-card.sync { border-top: 3px solid var(--accent3); }
+.comparison-card.async { border-top: 3px solid var(--accent2); }
+@media (max-width: 700px) { .comparison-grid { grid-template-columns: 1fr; } }
+@media print {
+    body { background: white; color: #333; }
+    h1, h2, h3 { color: #1a1a1a; }
+    pre { max-height: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>Module 9: Asynchronous Workflows<br><span style="font-size:0.55em; color: var(--accent1);">Comparison Script Installation & Usage Guide</span></h1>
+
+<blockquote>
+<strong>Purpose:</strong> This guide walks you through installing and running a comparison script that clearly demonstrates the performance difference between synchronous and asynchronous API patterns deployed in Module 9.
+</blockquote>
+
+<hr>
+
+<h2>What This Script Does</h2>
+
+<p>The <code>async_comparison.py</code> script replaces the workshop's <code>generator.py</code> with a purpose-built tool that:</p>
+
+<ol>
+<li>Sends identical requests to <strong>both</strong> the sync and async endpoints</li>
+<li>Measures response times with millisecond precision</li>
+<li>Demonstrates the <strong>polling pattern</strong> for retrieving async results</li>
+<li>Produces a formatted comparison showing speedup factor, latency reduction, and healthcare context</li>
+</ol>
+
+<div class="comparison-grid">
+<div class="comparison-card sync">
+<h4>Synchronous Pattern</h4>
+<p>Client waits for entire processing chain. Response time = sum of all downstream calls.</p>
+<p style="color: var(--accent3); font-weight: bold;">Client blocked: 2000+ ms typical</p>
+</div>
+<div class="comparison-card async">
+<h4>Asynchronous Pattern</h4>
+<p>Client gets a job ID immediately. Processing completes in background. Client polls when ready.</p>
+<p style="color: var(--accent2); font-weight: bold;">Client free: ~200 ms typical</p>
+</div>
+</div>
+
+<hr>
+
+<h2>Prerequisites</h2>
+
+<ul>
+<li>Module 9 SAM stack deployed (<code>workshop-cost-tuning</code>)</li>
+<li>Python 3.9+ with <code>boto3</code> and <code>aiohttp</code> (already available in CloudShell)</li>
+<li>AWS CLI configured for the correct region</li>
+</ul>
+
+<hr>
+
+<h2>Installation</h2>
+
+<div class="step-box">
+<h3><span class="step-num">1</span> Download the script</h3>
+<p>From AWS CloudShell or your terminal, run:</p>
+<pre><code>curl -O https://raw.githubusercontent.com/rsmith1979/serverless-demo/main/async_comparison.py</code></pre>
+</div>
+
+<div class="step-box">
+<h3><span class="step-num">2</span> Verify the download</h3>
+<pre><code>ls -la async_comparison.py
+head -5 async_comparison.py</code></pre>
+<p>You should see the file header: <code># Module 9: Async vs Sync Comparison Script</code></p>
+</div>
+
+<div class="step-box">
+<h3><span class="step-num">3</span> Ensure dependencies are available</h3>
+<pre><code>pip install aiohttp --quiet</code></pre>
+<p><code>boto3</code> is pre-installed in CloudShell. <code>aiohttp</code> may already be installed from the workshop setup.</p>
+</div>
+
+<hr>
+
+<h2>Usage</h2>
+
+<h3>Basic Comparison (Recommended for Demonstration)</h3>
+<pre><code>python3 async_comparison.py -s</code></pre>
+<p>Sends 10 requests to each endpoint and produces a side-by-side comparison.</p>
+
+<h3>Custom Request Count</h3>
+<pre><code>python3 async_comparison.py -s -n 20</code></pre>
+<p>Sends 20 requests to each endpoint for more statistically significant results.</p>
+
+<h3>Generate Heavy Traffic (for CloudWatch Metrics)</h3>
+<pre><code>python3 async_comparison.py -g</code></pre>
+<p>Sends 1,000 requests to each endpoint concurrently. Use this to populate CloudWatch dashboards and observe patterns under load.</p>
+
+<div class="tip">
+<strong>Tip:</strong> Start with <code>-s</code> to see the comparison output. Then run <code>-g</code> if you want to observe patterns in CloudWatch metrics and DynamoDB monitoring.
+</div>
+
+<hr>
+
+<h2>Expected Output</h2>
+
+<p>When you run <code>python3 async_comparison.py -s</code>, you will see output similar to:</p>
+
+<div class="output-example"><span class="header">================================================================
+  MODULE 9: SYNCHRONOUS vs ASYNCHRONOUS COMPARISON
+================================================================</span>
+
+<span class="header">================================================================
+  PHASE 1: SYNCHRONOUS PATTERN
+  Endpoint: https://xxxxx.execute-api.us-east-2.amazonaws.com/Prod/order-sync
+  Sending 10 requests (client waits for full processing)
+================================================================</span>
+
+<span class="metric">  [&#10003;] Request   1:   2341.2 ms (HTTP 200) | txn: a1b2c3d4e5f6...
+  [&#10003;] Request   2:   1987.5 ms (HTTP 200) | txn: b2c3d4e5f6a7...
+  [&#10003;] Request   3:   2156.8 ms (HTTP 200) | txn: c3d4e5f6a7b8...
+  ...</span>
+
+<span class="header">================================================================
+  PHASE 2: ASYNCHRONOUS PATTERN (initial response only)
+  Endpoint: https://xxxxx.execute-api.us-east-2.amazonaws.com/Prod/order-async
+  Sending 10 requests (client gets job ID immediately)
+================================================================</span>
+
+<span class="metric">  [&#10003;] Request   1:    187.3 ms (HTTP 200) | jobId: x9y8z7w6v5...
+  [&#10003;] Request   2:    203.1 ms (HTTP 200) | jobId: w6v5u4t3s2...
+  [&#10003;] Request   3:    195.6 ms (HTTP 200) | jobId: t3s2r1q0p9...
+  ...</span>
+
+<span class="header">================================================================
+  PHASE 3: POLLING FOR ASYNC RESULTS
+  Demonstrating client polling pattern (3 jobs)
+================================================================</span>
+
+<span class="metric">  [&#10003;] Job x9y8z7w6v5... resolved after 2 poll(s) (10234 ms total)
+       Transaction ID: d4e5f6a7b8c9
+  [&#10003;] Job w6v5u4t3s2... resolved after 1 poll(s) (5187 ms total)
+       Transaction ID: e5f6a7b8c9d0</span>
+
+<span class="header">================================================================
+  RESULTS SUMMARY
+================================================================</span>
+
+  SYNCHRONOUS (10 successful requests)
+  Metric                        Value
+  ------------------------- ----------
+<span class="metric">  Avg response time            2187.4 ms
+  Median                       2156.8 ms
+  Min                          1876.2 ms
+  Max                          2543.1 ms</span>
+
+  ASYNCHRONOUS - Initial Response (10 successful requests)
+  Metric                        Value
+  ------------------------- ----------
+<span class="highlight">  Avg response time             198.7 ms
+  Median                        195.6 ms
+  Min                           172.4 ms
+  Max                           241.3 ms</span>
+
+  COMPARISON
+  ---------------------------------------------
+  Sync avg (client waits)         2187.4 ms
+<span class="highlight">  Async avg (immediate response)   198.7 ms
+  Time saved per request          1988.7 ms
+  Client-perceived speedup          11.0x faster
+  Latency reduction                 90.9%</span>
+
+<span class="header">  KEY TAKEAWAY</span>
+  ---------------------------------------------
+  Sync:  Client blocked for 2187 ms on average
+  Async: Client free after 199 ms (gets job ID)
+         Processing completes in background
+         Client polls when ready for result
+
+  Healthcare Example:
+  A clinician submits a study for AI analysis.
+  Sync:  Clinician stares at loading screen for 2187+ ms
+  Async: Clinician gets confirmation in 199 ms,
+         moves to next patient, checks results later.
+</div>
+
+<hr>
+
+<h2>Troubleshooting</h2>
+
+<table>
+<tr><th>Error</th><th>Cause</th><th>Fix</th></tr>
+<tr><td><code>Stack 'workshop-cost-tuning' does not exist</code></td><td>Module 9 SAM template not deployed or different stack name</td><td>Deploy the Module 9 stack first, or check your stack name with <code>aws cloudformation list-stacks</code></td></tr>
+<tr><td><code>ModuleNotFoundError: aiohttp</code></td><td>aiohttp not installed</td><td><code>pip install aiohttp</code></td></tr>
+<tr><td><code>ConnectTimeoutError</code></td><td>API Gateway endpoint not reachable</td><td>Verify the stack deployed successfully: <code>aws cloudformation describe-stacks --stack-name workshop-cost-tuning</code></td></tr>
+<tr><td>All requests return HTTP 500</td><td>Lambda functions may have cold start issues</td><td>Run the script again; first invocations often trigger cold starts</td></tr>
+<tr><td><code>botocore.exceptions.NoRegionError</code></td><td>AWS region not configured</td><td><code>export AWS_DEFAULT_REGION=us-east-2</code></td></tr>
+</table>
+
+<hr>
+
+<h2>Understanding the Results</h2>
+
+<h3>Why is the async response so much faster?</h3>
+
+<p>In the <strong>synchronous</strong> pattern, the client's HTTP connection stays open while:</p>
+<ol>
+<li>Orders Lambda processes the request</li>
+<li>Orders Lambda calls Processing API Gateway</li>
+<li>Processing Lambda writes to DynamoDB</li>
+<li>Response propagates back through the entire chain</li>
+</ol>
+<p>Total time = sum of all steps. Client is blocked the entire time.</p>
+
+<p>In the <strong>asynchronous</strong> pattern:</p>
+<ol>
+<li>Orders Lambda creates a job ID</li>
+<li>Orders Lambda invokes the worker Lambda <em>asynchronously</em> (fire-and-forget)</li>
+<li>Orders Lambda immediately returns the job ID to the client</li>
+</ol>
+<p>Client is free after steps 1-3 (milliseconds). The heavy work in steps 4+ happens in the background.</p>
+
+<h3>What about the total processing time?</h3>
+
+<p>The total end-to-end processing time is similar for both patterns. The difference is <strong>who waits</strong>:</p>
+
+<div class="comparison-grid">
+<div class="comparison-card sync">
+<h4>Sync: Client waits</h4>
+<p>User is blocked. Cannot do anything else. If the call fails, user sees an error.</p>
+</div>
+<div class="comparison-card async">
+<h4>Async: System waits</h4>
+<p>User is free. Background processing can retry on failure. User checks results at their convenience.</p>
+</div>
+</div>
+
+<hr>
+
+<h2>Full Script Source</h2>
+
+<p>For reference, the complete script source is below. You can also view it on <a href="https://github.com/rsmith1979/serverless-demo/blob/main/async_comparison.py">GitHub</a>.</p>
+
+<pre><code># Module 9: Async vs Sync Comparison Script
+# ==========================================
+# Replaces generator.py with a clear side-by-side comparison of
+# synchronous vs asynchronous response times and behavior.
+#
+# Prerequisites:
+#   - Module 9 SAM stack deployed (workshop-cost-tuning)
+#   - Python 3.9+ with boto3, aiohttp installed (same deps as generator.py)
+#
+# Usage:
+#   python3 async_comparison.py -s        # Compare sync vs async (default 10 requests)
+#   python3 async_comparison.py -s -n 20  # 20 requests each
+#   python3 async_comparison.py -g        # Generate heavy traffic (1000 requests)
+
+import sys
+import getopt
+import boto3
+import asyncio
+import aiohttp
+from aiohttp import ClientSession
+import time
+import statistics
+
+STACK_NAME = &#x27;workshop-cost-tuning&#x27;
+TRANSACTION_POLLING_TIME = 5
+DEFAULT_REQUEST_COUNT = 10
+TRAFFIC_GENERATION_COUNT = 1000
+
+
+def get_urls_from_cfn():
+    &quot;&quot;&quot;Retrieve API Gateway endpoints from CloudFormation stack outputs.&quot;&quot;&quot;
+    cloudformation = boto3.resource(&#x27;cloudformation&#x27;)
+    stack = cloudformation.Stack(STACK_NAME)
+    urls = {}
+    for output in stack.outputs:
+        urls[output[&#x27;OutputKey&#x27;]] = output[&#x27;OutputValue&#x27;]
+    return urls
+
+
+async def timed_request(url, session):
+    &quot;&quot;&quot;Make a GET request and return elapsed time in ms + response body.&quot;&quot;&quot;
+    start = time.perf_counter()
+    try:
+        resp = await session.request(method=&quot;GET&quot;, url=url)
+        body = await resp.text()
+        elapsed = (time.perf_counter() - start) * 1000
+        return {&#x27;elapsed_ms&#x27;: round(elapsed, 1), &#x27;status&#x27;: resp.status, &#x27;body&#x27;: body}
+    except Exception as e:
+        elapsed = (time.perf_counter() - start) * 1000
+        return {&#x27;elapsed_ms&#x27;: round(elapsed, 1), &#x27;status&#x27;: &#x27;ERROR&#x27;, &#x27;body&#x27;: str(e)}
+
+
+async def run_comparison(urls, num_requests):
+    &quot;&quot;&quot;Send requests to both sync and async endpoints and compare.&quot;&quot;&quot;
+    orders_base = urls[&#x27;OrdersEndpoint&#x27;]
+    processing_base = urls[&#x27;ProcessingEndpoint&#x27;]
+
+    sync_url = f&quot;{orders_base}order-sync&quot;
+    async_url = f&quot;{orders_base}order-async&quot;
+
+    print(&quot;\n&quot; + &quot;=&quot; * 64)
+    print(&quot;  MODULE 9: SYNCHRONOUS vs ASYNCHRONOUS COMPARISON&quot;)
+    print(&quot;=&quot; * 64)
+
+    async with ClientSession() as session:
+
+        # --- Phase 1: Synchronous requests ---
+        print(f&quot;\n{&#x27;=&#x27;*64}&quot;)
+        print(f&quot;  PHASE 1: SYNCHRONOUS PATTERN&quot;)
+        print(f&quot;  Endpoint: {sync_url}&quot;)
+        print(f&quot;  Sending {num_requests} requests (client waits for full processing)&quot;)
+        print(f&quot;{&#x27;=&#x27;*64}\n&quot;)
+
+        sync_results = []
+        for i in range(num_requests):
+            result = await timed_request(sync_url, session)
+            sync_results.append(result)
+            status_icon = &quot;\u2713&quot; if result[&#x27;status&#x27;] == 200 else &quot;\u2717&quot;
+            # Extract transaction ID if available
+            tx_id = &quot;&quot;
+            try:
+                import json
+                body = json.loads(result[&#x27;body&#x27;])
+                tx_id = f&quot; | txn: {body.get(&#x27;transactionId&#x27;, &#x27;N/A&#x27;)[:12]}...&quot;
+            except:
+                pass
+            print(f&quot;  [{status_icon}] Request {i+1:&gt;3}: {result[&#x27;elapsed_ms&#x27;]:&gt;8.1f} ms (HTTP {result[&#x27;status&#x27;]}){tx_id}&quot;)
+
+        # --- Phase 2: Asynchronous requests (initial call only) ---
+        print(f&quot;\n{&#x27;=&#x27;*64}&quot;)
+        print(f&quot;  PHASE 2: ASYNCHRONOUS PATTERN (initial response only)&quot;)
+        print(f&quot;  Endpoint: {async_url}&quot;)
+        print(f&quot;  Sending {num_requests} requests (client gets job ID immediately)&quot;)
+        print(f&quot;{&#x27;=&#x27;*64}\n&quot;)
+
+        async_results = []
+        job_ids = []
+        for i in range(num_requests):
+            result = await timed_request(async_url, session)
+            async_results.append(result)
+            status_icon = &quot;\u2713&quot; if result[&#x27;status&#x27;] == 200 else &quot;\u2717&quot;
+            # Extract job ID
+            job_id = &quot;&quot;
+            try:
+                import json
+                body = json.loads(result[&#x27;body&#x27;])
+                jid = body.get(&#x27;jobId&#x27;, &#x27;&#x27;)
+                if jid:
+                    job_ids.append(jid)
+                    job_id = f&quot; | jobId: {jid[:12]}...&quot;
+            except:
+                pass
+            print(f&quot;  [{status_icon}] Request {i+1:&gt;3}: {result[&#x27;elapsed_ms&#x27;]:&gt;8.1f} ms (HTTP {result[&#x27;status&#x27;]}){job_id}&quot;)
+
+        # --- Phase 3: Poll for async results (demonstrate the pattern) ---
+        poll_count = min(3, len(job_ids))
+        if poll_count &gt; 0:
+            print(f&quot;\n{&#x27;=&#x27;*64}&quot;)
+            print(f&quot;  PHASE 3: POLLING FOR ASYNC RESULTS&quot;)
+            print(f&quot;  Demonstrating client polling pattern ({poll_count} jobs)&quot;)
+            print(f&quot;{&#x27;=&#x27;*64}\n&quot;)
+
+            for jid in job_ids[:poll_count]:
+                poll_url = f&quot;{processing_base}get-transaction/{jid}&quot;
+                attempts = 0
+                resolved = False
+                poll_start = time.perf_counter()
+
+                while not resolved and attempts &lt; 6:
+                    attempts += 1
+                    result = await timed_request(poll_url, session)
+                    try:
+                        body = json.loads(result[&#x27;body&#x27;])
+                        if &#x27;transactionId&#x27; in body:
+                            total_poll_time = (time.perf_counter() - poll_start) * 1000
+                            print(f&quot;  [\u2713] Job {jid[:12]}... resolved after {attempts} poll(s) ({total_poll_time:.0f} ms total)&quot;)
+                            print(f&quot;       Transaction ID: {body[&#x27;transactionId&#x27;]}&quot;)
+                            resolved = True
+                        else:
+                            print(f&quot;  [~] Job {jid[:12]}... poll #{attempts}: not yet complete, waiting {TRANSACTION_POLLING_TIME}s...&quot;)
+                            await asyncio.sleep(TRANSACTION_POLLING_TIME)
+                    except:
+                        print(f&quot;  [~] Job {jid[:12]}... poll #{attempts}: waiting {TRANSACTION_POLLING_TIME}s...&quot;)
+                        await asyncio.sleep(TRANSACTION_POLLING_TIME)
+
+                if not resolved:
+                    print(f&quot;  [!] Job {jid[:12]}... not resolved after {attempts} attempts&quot;)
+
+    # --- Results Summary ---
+    sync_times = [r[&#x27;elapsed_ms&#x27;] for r in sync_results if r[&#x27;status&#x27;] == 200]
+    async_times = [r[&#x27;elapsed_ms&#x27;] for r in async_results if r[&#x27;status&#x27;] == 200]
+
+    print(f&quot;\n{&#x27;=&#x27;*64}&quot;)
+    print(f&quot;  RESULTS SUMMARY&quot;)
+    print(f&quot;{&#x27;=&#x27;*64}&quot;)
+
+    if sync_times:
+        print(f&quot;\n  SYNCHRONOUS ({len(sync_times)} successful requests)&quot;)
+        print(f&quot;  {&#x27;Metric&#x27;:&lt;25} {&#x27;Value&#x27;:&gt;10}&quot;)
+        print(f&quot;  {&#x27;-&#x27;*25} {&#x27;-&#x27;*10}&quot;)
+        print(f&quot;  {&#x27;Avg response time&#x27;:&lt;25} {statistics.mean(sync_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Median&#x27;:&lt;25} {statistics.median(sync_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Min&#x27;:&lt;25} {min(sync_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Max&#x27;:&lt;25} {max(sync_times):&gt;8.1f} ms&quot;)
+        if len(sync_times) &gt; 1:
+            print(f&quot;  {&#x27;Std deviation&#x27;:&lt;25} {statistics.stdev(sync_times):&gt;8.1f} ms&quot;)
+
+    if async_times:
+        print(f&quot;\n  ASYNCHRONOUS - Initial Response ({len(async_times)} successful requests)&quot;)
+        print(f&quot;  {&#x27;Metric&#x27;:&lt;25} {&#x27;Value&#x27;:&gt;10}&quot;)
+        print(f&quot;  {&#x27;-&#x27;*25} {&#x27;-&#x27;*10}&quot;)
+        print(f&quot;  {&#x27;Avg response time&#x27;:&lt;25} {statistics.mean(async_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Median&#x27;:&lt;25} {statistics.median(async_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Min&#x27;:&lt;25} {min(async_times):&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Max&#x27;:&lt;25} {max(async_times):&gt;8.1f} ms&quot;)
+        if len(async_times) &gt; 1:
+            print(f&quot;  {&#x27;Std deviation&#x27;:&lt;25} {statistics.stdev(async_times):&gt;8.1f} ms&quot;)
+
+    if sync_times and async_times:
+        sync_avg = statistics.mean(sync_times)
+        async_avg = statistics.mean(async_times)
+        speedup = sync_avg / async_avg if async_avg &gt; 0 else 0
+        savings = sync_avg - async_avg
+
+        print(f&quot;\n  COMPARISON&quot;)
+        print(f&quot;  {&#x27;-&#x27;*45}&quot;)
+        print(f&quot;  {&#x27;Sync avg (client waits)&#x27;:&lt;30} {sync_avg:&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Async avg (immediate response)&#x27;:&lt;30} {async_avg:&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Time saved per request&#x27;:&lt;30} {savings:&gt;8.1f} ms&quot;)
+        print(f&quot;  {&#x27;Client-perceived speedup&#x27;:&lt;30} {speedup:&gt;8.1f}x faster&quot;)
+        print(f&quot;  {&#x27;Latency reduction&#x27;:&lt;30} {(savings/sync_avg)*100:&gt;7.1f}%&quot;)
+
+    print(f&quot;\n  KEY TAKEAWAY&quot;)
+    print(f&quot;  {&#x27;-&#x27;*45}&quot;)
+    print(f&quot;  Sync:  Client blocked for {statistics.mean(sync_times):.0f} ms on average&quot;)
+    print(f&quot;  Async: Client free after {statistics.mean(async_times):.0f} ms (gets job ID)&quot;)
+    print(f&quot;         Processing completes in background&quot;)
+    print(f&quot;         Client polls when ready for result&quot;)
+    print(f&quot;\n  Healthcare Example:&quot;)
+    print(f&quot;  A clinician submits a study for AI analysis.&quot;)
+    print(f&quot;  Sync:  Clinician stares at loading screen for {statistics.mean(sync_times):.0f}+ ms&quot;)
+    print(f&quot;  Async: Clinician gets confirmation in {statistics.mean(async_times):.0f} ms,&quot;)
+    print(f&quot;         moves to next patient, checks results later.&quot;)
+    print(f&quot;\n{&#x27;=&#x27;*64}\n&quot;)
+
+
+async def generate_traffic(urls):
+    &quot;&quot;&quot;Generate heavy traffic to both endpoints (same as generator.py -g).&quot;&quot;&quot;
+    orders_base = urls[&#x27;OrdersEndpoint&#x27;]
+    processing_base = urls[&#x27;ProcessingEndpoint&#x27;]
+    sync_url = f&quot;{orders_base}order-sync&quot;
+    async_url = f&quot;{orders_base}order-async&quot;
+
+    print(f&quot;\n  Generating {TRAFFIC_GENERATION_COUNT} requests to each endpoint...&quot;)
+    print(f&quot;  This will take a while. Watch CloudWatch metrics for patterns.\n&quot;)
+
+    async with ClientSession() as session:
+        sync_tasks = [timed_request(sync_url, session) for _ in range(TRAFFIC_GENERATION_COUNT)]
+        async_tasks = [timed_request(async_url, session) for _ in range(TRAFFIC_GENERATION_COUNT)]
+
+        all_results = await asyncio.gather(*sync_tasks, *async_tasks, return_exceptions=True)
+
+        sync_count = sum(1 for r in all_results[:TRAFFIC_GENERATION_COUNT] if isinstance(r, dict) and r.get(&#x27;status&#x27;) == 200)
+        async_count = sum(1 for r in all_results[TRAFFIC_GENERATION_COUNT:] if isinstance(r, dict) and r.get(&#x27;status&#x27;) == 200)
+
+        print(f&quot;  Traffic generation complete:&quot;)
+        print(f&quot;    Sync requests:  {sync_count}/{TRAFFIC_GENERATION_COUNT} successful&quot;)
+        print(f&quot;    Async requests: {async_count}/{TRAFFIC_GENERATION_COUNT} successful&quot;)
+        print(f&quot;\n  Check CloudWatch and DynamoDB metrics to observe the patterns.&quot;)
+
+
+async def main(argv):
+    num_requests = DEFAULT_REQUEST_COUNT
+
+    try:
+        opts, args = getopt.getopt(argv, &quot;hsagn:&quot;, [&quot;requests=&quot;])
+    except getopt.GetoptError:
+        print(&#x27;Usage: python3 async_comparison.py [-s compare] [-a async-only] [-g generate traffic] [-n NUM]&#x27;)
+        sys.exit(2)
+
+    for opt, arg in opts:
+        if opt == &#x27;-n&#x27; or opt == &#x27;--requests&#x27;:
+            num_requests = int(arg)
+
+    # Get endpoints
+    print(f&quot;\n  Module 9: Asynchronous Workflows&quot;)
+    print(f&quot;  Stack: {STACK_NAME}&quot;)
+    print(f&quot;  Retrieving endpoints...\n&quot;)
+
+    urls = get_urls_from_cfn()
+    print(f&quot;  Orders endpoint:     {urls.get(&#x27;OrdersEndpoint&#x27;, &#x27;NOT FOUND&#x27;)}&quot;)
+    print(f&quot;  Processing endpoint: {urls.get(&#x27;ProcessingEndpoint&#x27;, &#x27;NOT FOUND&#x27;)}&quot;)
+
+    if &#x27;OrdersEndpoint&#x27; not in urls or &#x27;ProcessingEndpoint&#x27; not in urls:
+        print(&quot;\n  [ERROR] Required stack outputs not found.&quot;)
+        print(f&quot;  Ensure &#x27;{STACK_NAME}&#x27; is deployed and has OrdersEndpoint + ProcessingEndpoint outputs.&quot;)
+        sys.exit(1)
+
+    mode = &#x27;s&#x27;  # default to comparison
+    for opt, arg in opts:
+        if opt == &#x27;-h&#x27;:
+            print(&#x27;Usage:&#x27;)
+            print(&#x27;  python3 async_comparison.py -s        # Side-by-side comparison (default)&#x27;)
+            print(&#x27;  python3 async_comparison.py -s -n 20  # 20 requests each&#x27;)
+            print(&#x27;  python3 async_comparison.py -g        # Generate heavy traffic (1000 each)&#x27;)
+            sys.exit()
+        elif opt == &#x27;-s&#x27;:
+            mode = &#x27;s&#x27;
+        elif opt == &#x27;-a&#x27;:
+            mode = &#x27;a&#x27;
+        elif opt == &#x27;-g&#x27;:
+            mode = &#x27;g&#x27;
+
+    if mode == &#x27;s&#x27; or mode == &#x27;a&#x27;:
+        await run_comparison(urls, num_requests)
+    elif mode == &#x27;g&#x27;:
+        await generate_traffic(urls)
+
+
+if __name__ == &quot;__main__&quot;:
+    s = time.perf_counter()
+    asyncio.run(main(sys.argv[1:]))
+    elapsed = time.perf_counter() - s
+    print(f&quot;  Script executed in {elapsed:0.2f} seconds.\n&quot;)
+</code></pre>
+
+</div>
+</body>
+</html>
